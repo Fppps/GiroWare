@@ -3,26 +3,435 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WIP - Girare Production</title>
+    <title>GiroWare AI - 0.0.5 Prerealese</title>
+
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
     <style>
         body {
-            height: 100vh;
-            background: linear-gradient(to top, #ffffff 0%, #edf3ff 100%);
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(to bottom, #ffffff, #ffe9dc);
+            height: 98vh;
+            overflow-x: hidden;
         }
 
-        .Page-WIP {
-            backdrop-filter:blur(16px) saturate(180%);
-            background:rgba(0, 0, 0, 0.45);
-            border-radius: 5PX;
-            font-family: Arial, Helvetica, sans-serif;
-            box-shadow: 0px 2px 9px #000000;
+        /* HEADER */
+        header {
+            height: 70px;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        select {
+            padding: 10px 16px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background: #f8f8f8;
+            cursor: pointer;
+        }
+
+        #profileIcon {
+            width: 42px;
+            height: 42px;
+            background: #4285F4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* UNLOCK MODAL */
+        #lockModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.35);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modalBox {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 14px;
+            width: 320px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        #closeModal {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #444;
+        }
+
+        .codeDisplay {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: opacity 0.4s;
+        }
+
+        .codeHidden {
+            opacity: 0;
+        }
+
+        .digitInput {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .digitInput input {
+            width: 40px;
+            height: 50px;
+            text-align: center;
+            font-size: 22px;
+            border-radius: 8px;
+            border: 1px solid #999;
+        }
+
+        .submitBtn {
+            background: #4285F4;
+            border: none;
+            padding: 10px 16px;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .shake {
+            animation: shake 0.35s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* EASTER EGG POPUP */
+        #eggPopup {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px 18px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            display: none;
+        }
+
+        /* CENTER UI */
+        .center {
+            text-align: center;
+            margin-top: 70px;
+        }
+
+        .center h1 {
+            font-size: 42px;
+            margin: 0;
+        }
+
+        .center p {
+            margin-top: 8px;
+            color: #666;
+        }
+
+        /* SEARCH BAR FIXED */
+        .searchBox {
+            width: 60%;
+            max-width: 800px;
+            background: #f5f7fa;
+            margin: 40px auto;
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            border-radius: 35px;
+            border: 1px solid #e0e0e0;
+            gap: 10px;
+        }
+
+        .searchBox input {
+            border: none;
+            flex: 1;
+            font-size: 18px;
+            background: transparent;
+            outline: none;
+        }
+
+        /* Suggestion Text */
+        .suggestions {
+            margin-top: 20px;
+        }
+
+        .suggestion-line {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        /* Hidden UI FX */
+        .glow {
+            box-shadow: 0 0 20px rgba(255,215,0,0.6);
+        }
+
+        .wobble {
+            animation: wob 0.4s;
+        }
+
+        @keyframes wob {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            50% { transform: translateX(3px); }
+            75% { transform: translateX(-3px); }
+            100% { transform: translateX(0); }
+        }
+
+        .pulse {
+            animation: pul 0.6s;
+        }
+
+        @keyframes pul {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <div class="Page-WIP">
-        <h1>Page in Progress</h1>
-        <h2>Page opening Soon, From a week to a month of work. for now, This page will look like this...</h2>
+
+<header>
+    <select id="Version_selector">
+        <option value="1" data-scramble="true">Girare 1</option>
+        <option value="1.5" data-scramble="true">Girare 1.5</option>
+        <option value="2lite" data-scramble="true">Girare 2 Lite</option>
+        <option value="2" data-scramble="true">Girare 2</option>
+        <option value="2plus" disabled data-scramble="true">Girare 2+ (Locked)</option>
+    </select>
+
+    <div id="profileIcon">G</div>
+</header>
+
+<div id="eggPopup"></div>
+
+<!-- UNLOCK MODAL -->
+<div id="lockModal">
+    <div class="modalBox" id="modalBox">
+        <div id="closeModal">✕</div>
+
+        <div class="codeDisplay" id="codeDisplay">xxxxx</div>
+
+        <div class="digitInput" id="digitWrapper" style="display:none;">
+            <input maxlength="1">
+            <input maxlength="1">
+            <input maxlength="1">
+            <input maxlength="1">
+            <input maxlength="1">
+        </div>
+
+        <button class="submitBtn" id="submitCode" style="display:none;">Unlock</button>
     </div>
+</div>
+
+<div class="center">
+    <h1 data-scramble="true">Meet GiroWare AI</h1>
+    <p data-scramble="true">Ask detailed questions for better Girare responses</p>
+
+    <div class="searchBox" id="searchBox">
+        <span class="material-symbols-outlined">search</span>
+        <input id="mainInput" placeholder="Ask anything..." />
+        <span class="material-symbols-outlined">mic</span>
+    </div>
+
+    <div class="suggestions">
+        <div class="suggestion-line" data-scramble="true">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            <span>Explain chaos turning into order</span>
+        </div>
+        <div class="suggestion-line" data-scramble="true">
+            <span class="material-symbols-outlined">travel_explore</span>
+            <span>Teach me something about gravity</span>
+        </div>
+        <div class="suggestion-line" data-scramble="true">
+            <span class="material-symbols-outlined">cloud</span>
+            <span>How do storms form paths?</span>
+        </div>
+    </div>
+</div>
+
+<script>
+
+/* =========================
+   SCRAMBLE GLITCH (15 MIN)
+   ========================= */
+
+const scrambleNodes = document.querySelectorAll("[data-scramble='true']");
+const searchInput = document.getElementById("mainInput");
+
+scrambleNodes.forEach(n => n.dataset.origText = n.textContent);
+searchInput.dataset.origPlaceholder = searchInput.placeholder;
+
+function scrambleWord(str) {
+    const chars = "abcdefghijklmnopqrstuvwxyz";
+    return str.split("").map(ch =>
+        /[a-zA-Z]/.test(ch) ? chars[Math.floor(Math.random() * chars.length)] : ch
+    ).join("");
+}
+
+function triggerGlitch15() {
+    scrambleNodes.forEach(el => {
+        const orig = el.dataset.origText;
+        el.textContent = scrambleWord(orig);
+    });
+
+    searchInput.placeholder = scrambleWord(searchInput.dataset.origPlaceholder);
+
+    setTimeout(() => {
+        scrambleNodes.forEach(el => {
+            el.textContent = el.dataset.origText;
+        });
+        searchInput.placeholder = searchInput.dataset.origPlaceholder;
+    }, 900000); // 15 minutes
+}
+
+/* =========================
+   EASTER EGGS + UI EFFECTS
+   ========================= */
+
+const versionSelect = document.getElementById("Version_selector");
+const eggPopup = document.getElementById("eggPopup");
+const searchBox = document.getElementById("searchBox");
+
+versionSelect.addEventListener("change", () => {
+    const v = versionSelect.value;
+    let msg = "";
+
+    const rare = (chance) => Math.random() < 1 / chance;
+
+    searchBox.classList.remove("glow","pulse","wobble");
+
+    if (v === "1") {
+        msg = "Hello there wonderer";
+        searchBox.classList.add("glow");
+    }
+    if (v === "1.5") {
+        msg = "I know things";
+        if (rare(200)) msg = "break I me Regeneate!";
+        searchBox.classList.add("wobble");
+    }
+    if (v === "2lite") {
+        msg = "I like physics";
+        if (rare(200)) msg = "I am a smary pants";
+        if (rare(600)) msg = "ChatGPT is a loser";
+        if (rare(900)) msg = "ChatGPT 1 is a poopy but";
+        searchBox.classList.add("pulse");
+    }
+    if (v === "2") msg = "Girare 2 ready.";
+    if (v === "2plus") msg = "Welcome to Girare 2+";
+
+    if (msg) {
+        eggPopup.textContent = msg;
+        eggPopup.style.display = "block";
+        setTimeout(() => eggPopup.style.display = "none", 2200);
+    }
+});
+
+/* =========================
+   UNLOCK SYSTEM
+   ========================= */
+
+const profile = document.getElementById("profileIcon");
+const modal = document.getElementById("lockModal");
+const codeDisplay = document.getElementById("codeDisplay");
+const digitWrapper = document.getElementById("digitWrapper");
+const submitBtn = document.getElementById("submitCode");
+const modalBox = document.getElementById("modalBox");
+let generatedCode = "";
+let unlocked = false;
+
+profile.addEventListener("click", () => {
+    if (unlocked) return;
+
+    modal.style.display = "flex";
+    generatedCode = Math.floor(10000 + Math.random() * 90000).toString();
+    codeDisplay.textContent = generatedCode;
+
+    setTimeout(() => codeDisplay.classList.add("codeHidden"), 1000);
+
+    setTimeout(() => {
+        digitWrapper.style.display = "flex";
+        submitBtn.style.display = "block";
+    }, 1100);
+});
+
+// Close button
+document.getElementById("closeModal").addEventListener("click", () => {
+    modal.style.display = "none";
+});
+
+// Glitch detection
+digitWrapper.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", () => {
+        let combo = "";
+        digitWrapper.querySelectorAll("input").forEach(i => combo += i.value);
+        if (combo.toLowerCase() === "help") {
+            triggerGlitch15();
+        }
+    });
+});
+
+// Unlock button
+submitBtn.addEventListener("click", () => {
+    let userInput = "";
+    digitWrapper.querySelectorAll("input").forEach(i => userInput += i.value);
+
+    if (userInput === generatedCode) {
+        unlocked = true;
+
+        document.querySelector("option[value='2plus']").disabled = false;
+        versionSelect.value = "2plus";
+
+        modal.style.display = "none";
+
+        eggPopup.textContent = "Girare 2+ Unlocked!";
+        eggPopup.style.display = "block";
+        setTimeout(() => eggPopup.style.display = "none", 3000);
+
+    } else {
+        modalBox.classList.add("shake");
+        setTimeout(() => modalBox.classList.remove("shake"), 400);
+    }
+});
+</script>
+
 </body>
 </html>
